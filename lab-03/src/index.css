@@ -1,0 +1,23 @@
+:root {
+  font-family: Verdana, Geneva, sans-serif;
+  color: #45666a;
+  background: #eaf5f1;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: linear-gradient(135deg, #eaf5f1 0%, #fff8ed 100%);
+}
+
+#root {
+  min-height: 100vh;
+}
