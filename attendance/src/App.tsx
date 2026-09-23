@@ -1,4 +1,4 @@
-import { useState, createContext, useContext } from "react";
+import { useState, createContext, useContext, useEffect } from "react";
 import "./App.css";
 import profilePhoto from "./assets/hero.png";
 import ram from "./assets/ram.png";
@@ -11,11 +11,17 @@ const profiles = [
     { name: "Sneha", age: 23, photo: sneha, num: 12 },
 ];
 
+// Props, UseState , UseContext ,UseEffect ,Callbacks, Forms, SideEffects, yup library, react-hook-form ,UseMemo ,UseForm .
+
 // main diff btw props and state is that props are immutable and state is mutable. 
 // props are used to pass data from parent to child component and state is used to manage data within a component. 
 // props are read-only and cannot be modified by the child component, while state can be modified using the setState function.
 // props are used for communication between components, while state is used for managing the internal data of a component.
 
+// forms used for user input and data collection. Forms allow users to enter information, such as text, numbers, or selections, and submit it to the application for processing.
+// before submitting a form i need to get data while typing is it valid? Yes, I can validate the data while typing using onChange event handler.
+// I can check the input value against certain criteria and provide feedback to the user in real-time. 
+// This helps improve the user experience by preventing errors and ensuring that the data entered is valid before submission.
 
 // what happens when state is updated? When state is updated, React re-renders the component and its child components to reflect the new state.
 // This means that any changes made to the state will trigger a re-render of the component, allowing the UI to update and display the latest data. 
@@ -37,6 +43,149 @@ const LanguageContext = createContext("English");
 const ThemeContext = createContext("light");
 
 function App() {
+  const [users, setUsers] = useState([]);
+  const [letter, setLetter] = useState("");
+  const [count, setCount] = useState(0);
+
+  // 1. useEffect WITHOUT dependency array
+  // Runs after EVERY render
+  useEffect(() => {
+    console.log("Component rendered");
+  });
+
+  // 2. useEffect WITH empty dependency array
+  // Runs only ONCE when component is mounted
+  useEffect(() => {
+    console.log("App started");
+
+    document.title = "Random Profiles";
+  }, []);
+
+  // 3. useEffect WITH dependency
+  // Runs whenever 'letter' changes
+  useEffect(() => {
+    if (letter === "") {
+      setUsers([]);
+      return;
+    }
+
+    fetch("https://randomuser.me/api/?results=50")
+      .then((res) => res.json())
+      .then((data) => {
+        const filteredUsers = data.results.filter((user) =>
+          user.name.first
+            .toLowerCase()
+            .startsWith(letter.toLowerCase())
+        );
+
+        setUsers(filteredUsers);
+      });
+  }, [letter]);
+
+  return (
+    <div>
+      <h1>Random Profiles</h1>
+
+      <input
+        type="text"
+        placeholder="Enter starting letter"
+        value={letter}
+        maxLength={1}
+        onChange={(e) => setLetter(e.target.value)}
+      />
+
+      <button onClick={() => setCount(count + 1)}>
+        Re-render: {count}
+      </button>
+
+      <div>
+        {users.map((user) => (
+          <div key={user.login.uuid}>
+            <img
+              src={user.picture.medium}
+              alt={user.name.first}
+            />
+
+            <h2>
+              {user.name.first} {user.name.last}
+            </h2>
+
+            <p>{user.email}</p>
+            <p>{user.location.country}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+function App2() {
+    const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
+
+    // function handleChange(event : any) {
+    //     event.preventDefault();
+    //     console.log(name);
+    //     setName(event.target.value);
+    // }
+    function Validate() {
+        if(name.length < 3) {
+            alert("Name must be at least 3 characters long");
+            return;
+        }
+        if(password.length < 5) {
+            alert("Password must be at least 5 characters long");
+            return;
+        }
+        alert("Form submitted successfully");
+
+        setName("");
+        setPassword("");
+    }
+    
+    useEffect(() => {
+        localStorage.setItem("name", name);
+        localStorage.setItem("password", password);
+    }, [name, password]);
+
+    function getinput(){
+        const storedName = localStorage.getItem("name");
+        const storedPassword = localStorage.getItem("password");
+        if (storedName && storedPassword) {
+            setName(storedName);
+            setPassword(storedPassword);
+        }
+    }
+    return (
+        <div>
+            <input
+                name="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter your name"
+            />
+            <br />
+            <input 
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)} 
+                placeholder="Enter your password"
+            />
+            <br />
+            <button type="submit" onClick={Validate}>Submit</button>
+            <button onClick={getinput}> Get Credentials </button>
+            {/* <p>
+                Name: {name} <br />
+                Password: {password}
+            </p> */}
+            {/* <p>You are typing: {name}</p> */}
+            {/* <App1/> */}
+        </div>
+    );
+}
+
+function App1() {
     const [selectedProfile, setSelectedProfile] = useState(profiles[0]);
     const [totalStudents, setTotalStudents] = useState(30);
     const [language, setLanguage] = useState("English");
