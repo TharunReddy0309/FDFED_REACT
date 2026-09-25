@@ -3,7 +3,7 @@ import "./App.css";
 import profilePhoto from "./assets/hero.png";
 import ram from "./assets/ram.png";
 import sneha from "./assets/sneha.png";
-
+import Prac from "./prac";
 const profiles = [
     { name: "Ram", age: 21, photo: ram, num: 40 },
     { name: "Priya", age: 22, photo: profilePhoto, num: 50 },
@@ -42,7 +42,14 @@ const profiles = [
 const LanguageContext = createContext("English");
 const ThemeContext = createContext("light");
 
-function App() {
+function App(){
+    return(
+        <div>
+            <Prac/>
+        </div>
+    );
+}
+function App32() {
   const [users, setUsers] = useState([]);
   const [letter, setLetter] = useState("");
   const [count, setCount] = useState(0);
