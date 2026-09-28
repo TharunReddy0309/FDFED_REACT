@@ -4,7 +4,7 @@ export default function Prac() {
     const [name,setName] = useState("");
     const [cnt,setcnt]=useState(0);
     function Inc(){
-        setcnt(cnt+1);
+        setcnt(name.length);
     }
     useEffect(Inc,[name]);
     return (
