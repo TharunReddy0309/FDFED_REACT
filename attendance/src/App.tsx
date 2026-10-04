@@ -4,6 +4,7 @@ import profilePhoto from "./assets/hero.png";
 import ram from "./assets/ram.png";
 import sneha from "./assets/sneha.png";
 import Prac from "./prac";
+import App42 from "./lab";
 const profiles = [
     { name: "Ram", age: 21, photo: ram, num: 40 },
     { name: "Priya", age: 22, photo: profilePhoto, num: 50 },
@@ -45,6 +46,7 @@ const ThemeContext = createContext("light");
 function App(){
     return(
         <div>
+            <App42/>
             <Prac/>
         </div>
     );
